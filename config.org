@@ -116,4 +116,18 @@
 ;; If you want to replace it with yasnippet's default snippets
 (package! yasnippet-snippets)
 #+end_src
+
+#+RESULTS:
+| yasnippet-snippets | :modules | ((:private . config) (:private . modules)) |
+
+*** lets enable gitlens features in emacs
+#+begin_src elisp
+(setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+
+
+#+end_src
+
+#+RESULTS:
+: (^Author:      . ^Commit:     )
+
 : TODO add more configuration for doom
