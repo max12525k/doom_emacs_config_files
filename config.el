@@ -92,3 +92,8 @@
   '("go" "python" "ipython" "bash" "sh" "jupyter-python"))
 (dolist (lang org-babel-lang-list)
   (eval `(lsp-org-babel-enable ,lang)))
+
+;; in ~/.doom.d/packages.el
+(package! doom-snippets :ignore t)
+;; If you want to replace it with yasnippet's default snippets
+(package! yasnippet-snippets)

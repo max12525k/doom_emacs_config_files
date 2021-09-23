@@ -109,5 +109,11 @@
 
 #+end_src
 
-
+*** lets set ignore doom-snippets and get yasnippets
+#+begin_src elisp
+;; in ~/.doom.d/packages.el
+(package! doom-snippets :ignore t)
+;; If you want to replace it with yasnippet's default snippets
+(package! yasnippet-snippets)
+#+end_src
 : TODO add more configuration for doom
