@@ -109,16 +109,7 @@
 
 #+end_src
 
-*** lets set ignore doom-snippets and get yasnippets
-#+begin_src elisp
-;; in ~/.doom.d/packages.el
-(package! doom-snippets :ignore t)
-;; If you want to replace it with yasnippet's default snippets
-(package! yasnippet-snippets)
-#+end_src
 
-#+RESULTS:
-| yasnippet-snippets | :modules | ((:private . config) (:private . modules)) |
 
 *** lets enable gitlens features in emacs
 #+begin_src elisp
