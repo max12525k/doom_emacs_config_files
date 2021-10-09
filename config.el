@@ -19,13 +19,13 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "monospace" :SIZE 18 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; (setq doom-font (font-spec :family "Fira Code" :size 18 :weight 'semi-light)
+      ;; doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-vibrant)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -53,6 +53,44 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 (with-eval-after-load 'typescript-mode (add-hook 'typescript-mode-hook #'lsp))
+
+(setq doom-font (font-spec :family "JetBrains Mono" :size 24)
+     doom-big-font (font-spec :family "JetBrains Mono" :size 34)
+     doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
+     doom-unicode-font (font-spec :family "JuliaMono")
+     doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
+
+(defvar required-fonts '("JetBrainsMono.*" "Overpass" "JuliaMono" "IBM Plex Mono" "Merriweather" "Alegreya"))
+
+(defvar available-fonts
+  (delete-dups (or (font-family-list)
+                   (split-string (shell-command-to-string "fc-list : family")
+                                 "[,\n]"))))
+
+(defvar missing-fonts
+  (delq nil (mapcar
+             (lambda (font)
+               (unless (delq nil (mapcar (lambda (f)
+                                           (string-match-p (format "^%s$" font) f))
+                                         available-fonts))
+                 font))
+             required-fonts)))
+
+
+(if missing-fonts
+    (pp-to-string
+     `(unless noninteractive
+        (add-hook! 'doom-init-ui-hook
+          (run-at-time nil nil
+                       (lambda ()
+                         (message "%s missing the following fonts: %s"
+                                  (propertize "Warning!" 'face '(bold warning))
+                                  (mapconcat (lambda (font)
+                                               (propertize font 'face 'font-lock-variable-name-face))
+                                             ',missing-fonts
+                                             ", "))
+                         (sleep-for 1))))))
+  ";; No missing fonts detected")
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized) )
 
@@ -94,3 +132,21 @@
   (eval `(lsp-org-babel-enable ,lang)))
 
 (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+
+(remove-hook 'window-setup-hook #'doom-init-theme-h)
+(add-hook 'after-init-hook #'doom-init-theme-h 'append)
+(delq! t custom-theme-load-path)
+(custom-set-faces!
+  '(doom-modeline-buffer-modified :foreground "orange"))
+
+(setq doom-fallback-buffer-name "► Doom"
+      +doom-dashboard-name "► Doom")
+
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-quick-access t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort))
+
+(setq-default history-length 1000)
+(setq-default prescient-history-length 1000)

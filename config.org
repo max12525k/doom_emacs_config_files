@@ -1,3 +1,6 @@
+
+Note: None of this code is mine
+most of this code has been taken from [[https://tecosaur.github.io/emacs-config/config.html][tecosaur doom emacs config]]
 *  Basic config
 
 #+begin_src elisp
@@ -23,13 +26,13 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "monospace" :SIZE 18 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; (setq doom-font (font-spec :family "Fira Code" :size 18 :weight 'semi-light)
+      ;; doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-vibrant)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -60,12 +63,69 @@
 
 #+end_src
 
+#+RESULTS:
+
+* Important config:
+** Set cool fonts
+
+#+begin_src elisp
+(setq doom-font (font-spec :family "JetBrains Mono" :size 24)
+     doom-big-font (font-spec :family "JetBrains Mono" :size 34)
+     doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
+     doom-unicode-font (font-spec :family "JuliaMono")
+     doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
+
+#+end_src
+
+#+RESULTS:
+: #<font-spec nil nil IBM\ Plex\ Mono nil nil light nil nil nil nil nil nil nil>
+
+** Ensure fonts available on system
+
+#+begin_src elisp
+(defvar required-fonts '("JetBrainsMono.*" "Overpass" "JuliaMono" "IBM Plex Mono" "Merriweather" "Alegreya"))
+
+(defvar available-fonts
+  (delete-dups (or (font-family-list)
+                   (split-string (shell-command-to-string "fc-list : family")
+                                 "[,\n]"))))
+
+(defvar missing-fonts
+  (delq nil (mapcar
+             (lambda (font)
+               (unless (delq nil (mapcar (lambda (f)
+                                           (string-match-p (format "^%s$" font) f))
+                                         available-fonts))
+                 font))
+             required-fonts)))
+
+
+(if missing-fonts
+    (pp-to-string
+     `(unless noninteractive
+        (add-hook! 'doom-init-ui-hook
+          (run-at-time nil nil
+                       (lambda ()
+                         (message "%s missing the following fonts: %s"
+                                  (propertize "Warning!" 'face '(bold warning))
+                                  (mapconcat (lambda (font)
+                                               (propertize font 'face 'font-lock-variable-name-face))
+                                             ',missing-fonts
+                                             ", "))
+                         (sleep-for 1))))))
+  ";; No missing fonts detected")
+
+#+end_src
 * Advance Config:
+
 ** Open Full Screen
+
 #+begin_src elisp
 (add-to-list 'default-frame-alist '(fullscreen . maximized) )
 #+end_src
+
 ** Fix annoying lose of highlight
+
 #+begin_src elisp
 (after! web-mode
   (defun msc/save-and-revert-buffer ()
@@ -75,7 +135,9 @@
 
   (map! :mode web-mode-map :leader "j" 'msc/save-and-revert-buffer))
 #+end_src
+
 ** Lets get LSP in src block
+
 #+begin_src elisp
 (cl-defmacro lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
@@ -111,7 +173,8 @@
 
 
 
-*** lets enable gitlens features in emacs
+** lets enable gitlens features in emacs
+
 #+begin_src elisp
 (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
 
@@ -122,3 +185,48 @@
 : (^Author:      . ^Commit:     )
 
 : TODO add more configuration for doom
+
+** lets make doom more beautiful
+
+#+begin_src elisp
+(remove-hook 'window-setup-hook #'doom-init-theme-h)
+(add-hook 'after-init-hook #'doom-init-theme-h 'append)
+(delq! t custom-theme-load-path)
+(custom-set-faces!
+  '(doom-modeline-buffer-modified :foreground "orange"))
+
+
+#+end_src
+
+#+RESULTS:
+| doom--customize-themes-h-42 |
+
+
+**  better buffer names
+
+#+begin_src elisp
+(setq doom-fallback-buffer-name "► Doom"
+      +doom-dashboard-name "► Doom")
+
+#+end_src
+
+#+RESULTS:
+: ► Doom
+
+** Company Improvement
+
+#+begin_src elisp
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-quick-access t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort))
+
+(setq-default history-length 1000)
+(setq-default prescient-history-length 1000)
+#+end_src
+
+#+RESULTS:
+: 1000
+
+**
