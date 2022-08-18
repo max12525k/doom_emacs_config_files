@@ -139,8 +139,8 @@
 (custom-set-faces!
   '(doom-modeline-buffer-modified :foreground "orange"))
 
-(setq doom-fallback-buffer-name "► Doom"
-      +doom-dashboard-name "► Doom")
+(setq doom-fallback-buffer-name "âº Doom"
+      +doom-dashboard-name "âº Doom")
 
 (after! company
   (setq company-idle-delay 0.5
@@ -150,3 +150,8 @@
 
 (setq-default history-length 1000)
 (setq-default prescient-history-length 1000)
+
+(after! org
+  (use-package! ox-extra
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines))))

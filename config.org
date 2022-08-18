@@ -229,4 +229,14 @@ most of this code has been taken from [[https://tecosaur.github.io/emacs-config/
 #+RESULTS:
 : 1000
 
-**
+** resume ignore and noexport enable
+#+begin_src elisp
+(after! org
+  (use-package! ox-extra
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines))))
+
+#+end_src
+
+#+RESULTS:
+: t
