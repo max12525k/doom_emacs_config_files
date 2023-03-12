@@ -139,8 +139,8 @@
 (custom-set-faces!
   '(doom-modeline-buffer-modified :foreground "orange"))
 
-(setq doom-fallback-buffer-name "âº Doom"
-      +doom-dashboard-name "âº Doom")
+(setq doom-fallback-buffer-name "► Doom"
+      +doom-dashboard-name "► Doom")
 
 (after! company
   (setq company-idle-delay 0.5
@@ -155,3 +155,11 @@
   (use-package! ox-extra
     :config
     (ox-extras-activate '(latex-header-blocks ignore-headlines))))
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         ("C-<tab>" . 'copilot-accept-completion-by-word)
+         :map copilot-completion-map
+         ("<tab>" . 'copilot-accept-completion)
+         ("TAB" . 'copilot-accept-completion)))
