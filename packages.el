@@ -51,3 +51,10 @@
 (package! ng2-mode)
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+(package! org-auto-tangle)
+
+; awesome-cv
+(package! org-cv
+  :recipe (:host gitlab
+           :repo "Titan-C/org-cv"))
+

@@ -253,3 +253,25 @@ most of this code has been taken from [[https://tecosaur.github.io/emacs-config/
 #+end_src
 
 #+RESULTS:
+
+** Org-auto-tangle
+
+#+begin_src elisp
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-default t))
+
+#+end_src
+
+#+RESULTS:
+
+** add awesome-cv
+#+begin_src elisp
+
+; after org
+(use-package! ox-awesomecv
+  :after org)
+
+#+end_src
