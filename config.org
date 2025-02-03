@@ -254,6 +254,15 @@ most of this code has been taken from [[https://tecosaur.github.io/emacs-config/
 
 #+RESULTS:
 
+** UV
+#+begin_src elisp
+(use-package! uv-mode
+  :hook (python-mode . uv-auto-activate-hook))
+#+end_src
+
+#+RESULTS:
+| uv-auto-activate-hook | doom-modeline-env-setup-python | doom--enable-+web-django-mode-in-python-mode-h | pipenv-mode |
+
 ** Org-auto-tangle
 
 #+begin_src elisp
@@ -274,4 +283,10 @@ most of this code has been taken from [[https://tecosaur.github.io/emacs-config/
 (use-package! ox-awesomecv
   :after org)
 
+#+end_src
+
+** rust analyser
+#+begin_src elisp
+(after! lsp-rust
+  (setq lsp-rust-server 'rust-analyzer))
 #+end_src

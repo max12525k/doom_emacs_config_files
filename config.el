@@ -164,6 +164,9 @@
          ("<tab>" . 'copilot-accept-completion)
          ("TAB" . 'copilot-accept-completion)))
 
+(use-package! uv-mode
+  :hook (python-mode . uv-auto-activate-hook))
+
 (use-package! org-auto-tangle
   :defer t
   :hook (org-mode . org-auto-tangle-mode)
@@ -173,3 +176,6 @@
 ; after org
 (use-package! ox-awesomecv
   :after org)
+
+(after! lsp-rust
+  (setq lsp-rust-server 'rust-analyzer))
